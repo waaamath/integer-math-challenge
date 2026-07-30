@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#102B4E">
+  <title>整數加減過關</title>
+  <meta name="description" content="國一正負整數加減闖關練習，支援九種關卡、錯題重練與學習紀錄。">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="整數加減過關">
+  <meta property="og:description" content="9 種關卡・錯題重練・15 分鐘學習提醒">
+  <meta property="og:image" content="social-preview.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="整數加減過關">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="cute.css">
+</head>
+<body>
+  <div id="app">
+    <section id="login" class="screen active auth-screen">
+      <main class="auth-shell">
+        <div class="brand-mark" aria-hidden="true">
+          <span class="brand-orbit"></span>
+          <span class="brand-core">±</span>
+        </div>
+        <p class="eyebrow">INT MATH QUEST</p>
+        <h1>整數加減過關</h1>
+        <p class="lead">登入學習代號，保留每一次努力的紀錄。</p>
+
+        <form id="login-form" class="panel login-panel">
+          <label class="field">
+            <span>姓名或暱稱</span>
+            <input id="student-name" type="text" maxlength="20" autocomplete="name" placeholder="請輸入學習代號" required>
+          </label>
+          <label class="field">
+            <span>班級 <small>選填</small></span>
+            <input id="student-class" type="text" maxlength="20" autocomplete="organization" placeholder="例如：七年一班">
+          </label>
+          <p id="login-error" class="form-error" role="alert"></p>
+          <button class="primary big" type="submit">進入練習基地 <span>→</span></button>
+        </form>
+        <p class="privacy-note">資料只用於辨識本次學習紀錄，不需密碼。</p>
+      </main>
+    </section>
+
+    <section id="setup" class="screen setup-screen">
+      <header class="setup-head">
+        <div>
+          <p class="eyebrow">INT MATH QUEST</p>
+          <h1>整數加減過關</h1>
+          <p id="welcome-text" class="welcome-text"></p>
+        </div>
+        <button id="logout-btn" class="text-btn" type="button">切換學生</button>
+      </header>
+
+      <main class="setup-grid">
+        <section class="panel levels-card">
+          <div class="panel-title-row">
+            <div>
+              <span class="step-label">01 / 關卡</span>
+              <h2>選擇練習任務</h2>
+            </div>
+            <div class="levels-actions">
+              <button id="lvl-all" class="chip-btn" type="button">全選</button>
+              <button id="lvl-none" class="chip-btn" type="button">清除</button>
+            </div>
+          </div>
+          <div id="levels-select" class="levels-select"></div>
+          <p class="mix-note">選第 9 關時只進行自選混合；搭配勾選第 1～7 關決定題型，未勾則混合全部。</p>
+        </section>
+
+        <section class="panel ranges-card">
+          <span class="step-label">02 / 數字範圍</span>
+          <h2>設定題目大小</h2>
+          <div class="range-block">
+            <div class="range-title"><span>A</span>第一個數字</div>
+            <div class="range-row">
+              <label>最小值<input id="minA" type="number" inputmode="numeric" value="1"></label>
+              <span class="range-dash">—</span>
+              <label>最大值<input id="maxA" type="number" inputmode="numeric" value="20"></label>
+            </div>
+          </div>
+          <div class="range-block">
+            <div class="range-title accent"><span>B</span>第二個數字</div>
+            <div class="range-row">
+              <label>最小值<input id="minB" type="number" inputmode="numeric" value="1"></label>
+              <span class="range-dash">—</span>
+              <label>最大值<input id="maxB" type="number" inputmode="numeric" value="20"></label>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <p id="setup-error" class="form-error setup-error" role="alert"></p>
+      <button id="start-btn" class="primary start-btn" type="button">
+        <span>開始挑戰</span><small>每關連續答對 30 題</small>
+      </button>
+    </section>
+
+    <section id="quiz" class="screen quiz-screen">
+      <header class="quiz-top">
+        <button id="quit-btn" class="icon-btn" type="button" aria-label="結束練習">×</button>
+        <div class="progress-shell"><div id="progress-bar"></div></div>
+        <span id="progress-text">連續 0 / 30</span>
+      </header>
+
+      <div id="level-banner" class="level-banner"></div>
+      <div id="review-panel" class="review-panel" hidden></div>
+
+      <main class="question-area">
+        <div id="mascot" class="mascot" aria-label="整數小恐龍">
+          <img id="mascot-image" src="icons/mascot-dino-idle-v2.png" alt="自信待機的整數小恐龍">
+        </div>
+        <div id="question" class="question"></div>
+        <div id="answer" class="answer-box"><span class="placeholder">輸入答案</span></div>
+        <div id="feedback" class="feedback" aria-live="polite"></div>
+      </main>
+
+      <div class="keypad" aria-label="數字鍵盤">
+        <button class="key" data-key="7" type="button">7</button>
+        <button class="key" data-key="8" type="button">8</button>
+        <button class="key" data-key="9" type="button">9</button>
+        <button class="key" data-key="4" type="button">4</button>
+        <button class="key" data-key="5" type="button">5</button>
+        <button class="key" data-key="6" type="button">6</button>
+        <button class="key" data-key="1" type="button">1</button>
+        <button class="key" data-key="2" type="button">2</button>
+        <button class="key" data-key="3" type="button">3</button>
+        <button class="key sign" data-key="sign" type="button">±</button>
+        <button class="key" data-key="0" type="button">0</button>
+        <button class="key back" data-key="back" type="button">⌫</button>
+      </div>
+      <button id="submit-btn" class="primary submit-btn" type="button">確定</button>
+    </section>
+
+    <section id="result" class="screen result-screen">
+      <div class="result-badge" aria-hidden="true">★</div>
+      <p class="eyebrow">MISSION REPORT</p>
+      <h1 id="result-title">練習完成</h1>
+      <div id="score" class="score"></div>
+      <div id="score-detail" class="score-detail"></div>
+      <div id="record-status" class="record-status"></div>
+      <div id="wrong-list" class="wrong-list"></div>
+      <button id="again-btn" class="primary big" type="button">使用相同設定再一次</button>
+      <button id="home-btn" class="secondary big" type="button">返回任務設定</button>
+    </section>
+
+    <div id="practice-reminder" class="practice-reminder" hidden role="dialog" aria-modal="true" aria-labelledby="reminder-title">
+      <div class="reminder-card">
+        <div class="reminder-icon" aria-hidden="true">15</div>
+        <p class="eyebrow">休息提醒</p>
+        <h2 id="reminder-title">你已經認真練習 15 分鐘，很棒！</h2>
+        <p>今天可以休息了<br>明天我們繼續。</p>
+        <button id="reminder-rest" class="primary big" type="button">結束今天的練習</button>
+        <button id="reminder-continue" class="secondary big" type="button">我想再練一下</button>
+      </div>
+    </div>
+
+    <footer id="app-version" class="app-version"></footer>
+  </div>
+  <script src="app.js"></script>
+</body>
+</html>
