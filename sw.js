@@ -1,4 +1,4 @@
-const CACHE = "integer-math-challenge-v3";
+const CACHE = "integer-math-challenge-v4";
 const CORE = [
   "./",
   "./index.html",

@@ -1,5 +1,5 @@
-const VERSION = "v3";
-const RECORD_URL = "";
+const VERSION = "v4";
+const RECORD_URL = "https://script.google.com/macros/s/AKfycbwaDH1znyOXQkVRPPhqTnSiQ0V_Oxb6PTj4LzfLoUCFVajN8-85RAJVQR3BUrpMJJQ/exec";
 const PRACTICE_REMINDER_MS = 15 * 60 * 1000;
 const GOAL = 30;
 const REVIEW_TRIGGER = 5;
